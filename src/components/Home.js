@@ -18,6 +18,20 @@ const Home = () => {
   const [configLoading, setConfigLoading] = useState(false);
   const [token, setToken] = useState("");
 
+  useEffect(() => {
+    if (selectedGenre.length !== 0) {
+      fetchSongsFromGenre();
+    }
+  }, [selectedGenre]);
+
+  const fetchSongsFromGenre = async () => {
+    const response = await fetchFromSpotify({
+      token,
+      endpoint: `search?q=genre:${selectedGenre}&type=track&limit=10`,
+    });
+    console.log(response);
+  };
+
   const loadGenres = async (t) => {
     setConfigLoading(true);
     const response = await fetchFromSpotify({
