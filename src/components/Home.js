@@ -12,7 +12,9 @@ const Home = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [numSongs, setNumSongs] = useState(1);
   const [numArtists, setNumArtists] = useState(2);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [isHardMode, setIsHardMode] = useState(false); // possible throwaway answer from another genre?
+  const [songs, setSongs] = useState([]);
 
   const [authLoading, setAuthLoading] = useState(false);
   const [configLoading, setConfigLoading] = useState(false);
@@ -31,6 +33,8 @@ const Home = () => {
     });
     console.log(response);
   };
+
+  // getRandomSongs: call setSongs
 
   const loadGenres = async (t) => {
     setConfigLoading(true);
