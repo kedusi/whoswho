@@ -12,6 +12,7 @@ const Home = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [numSongs, setNumSongs] = useState(1);
   const [numArtists, setNumArtists] = useState(2);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const [authLoading, setAuthLoading] = useState(false);
   const [configLoading, setConfigLoading] = useState(false);
