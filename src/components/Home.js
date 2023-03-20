@@ -31,7 +31,14 @@ const Home = () => {
       token,
       endpoint: `search?q=genre:${selectedGenre}&type=track&limit=10`,
     });
-    console.log(response);
+    // 
+    const songs = response.tracks.items
+    const cleanedSongs = songs.map(({artists, preview_url, name}) => ({
+      artists,
+      preview_url,
+      name
+    }))
+    setSongs(cleanedSongs)
   };
 
   // getRandomSongs: call setSongs
@@ -89,7 +96,7 @@ const Home = () => {
         setNumSongs={setNumSongs}
         setNumArtists={setNumArtists}
       />
-      <Game />
+      {songs.length > 0 && <Game songs={songs} numSongs={numSongs} />}
     </React.Fragment>
   );
 };

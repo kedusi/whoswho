@@ -2,13 +2,29 @@ import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../../services/api";
 import { Wrapper } from "./Game.styles";
 
-const Game = (/*{songs}*/) => {
+const Game = ({songs, numSongs}) => {
   const [currentRound, setCurrentRound] = useState(null);
   const [numIncorrect, setNumIncorrect] = useState(0);
   const [choice, setChoice] = useState(null);
+  const [chosenSongs, setChosenSongs] = useState(songs)
+
+  const getRandom = () => {
+    let temp = songs
+    let tempChosenSongs = songs
+    let counter = 0
+    while(counter < numSongs) {
+      let randomIndex = Math.floor(Math.random() * temp.length)
+      tempChosenSongs[randomIndex].isChosen = true
+      temp = tempChosenSongs.filter(el => !el.isChosen)
+      counter++
+    }
+    setChosenSongs(tempChosenSongs)
+  }
 
   useEffect(() => {
     // initialize
+    getRandom()
+    console.log(chosenSongs.filter(el => el.isChosen))
     setCurrentRound(0);
   }, []);
 
