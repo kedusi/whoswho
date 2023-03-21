@@ -90,15 +90,22 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const moveToNextRound = () => {
-    setCurrentRound(currentRound++);
+    //setCurrentRound(currentRound++) modifies state directly
+    setCurrentRound((prev) => prev++);
     //getRandomOptions();
   };
+
+  // flatten options
+  const getNames = (artists) =>
+    artists.reduce((acc, artist) => acc + ", " + artist.name, artists[0].name);
 
   const renderOptions = options.map((o, index) => (
     <GuessOption
       key={index}
-      name={o.name}
-      isCorrect={o.isCorrect}
+      // options are songs with original isChosen flags
+      // artists can be an array of multiple, so getNames will flatten to a comma delimited string
+      name={getNames(o.artists)}
+      isCorrect={o.isChosen}
       setChoice={() => setChoice(o)}
       roundOver={!!choice}
     />
