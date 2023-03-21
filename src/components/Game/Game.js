@@ -55,6 +55,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   useEffect(() => {
     // initialize
     getRandom();
+    console.log(listOfSongs);
     getRandomOptions();
     moveToNextRound();
   }, []);
@@ -81,7 +82,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const result = () => {
-    if (!choice.isCorrect) setNumIncorrect(numIncorrect++);
+    if (!choice.isChosen) setNumIncorrect((prev) => prev++);
   };
 
   const isGameOver = () => {
@@ -97,7 +98,8 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   // flatten options
   const getNames = (artists) =>
-    artists.reduce((acc, artist) => acc + ", " + artist.name, artists[0].name);
+    //artists.reduce((acc, artist) => acc + ", " + artist.name, artists[0].name);
+    artists.map((a) => a.name).join(", ");
 
   const renderOptions = options.map((o, index) => (
     <GuessOption
