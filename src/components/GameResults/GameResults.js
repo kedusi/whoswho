@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const GameResults = () => {
-  return <></>;
+  return <>game is over</>;
 };
 
 export default GameResults;

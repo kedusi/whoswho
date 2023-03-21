@@ -1,9 +1,10 @@
 import { round } from "lodash";
 import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../../services/api";
-import { Wrapper } from "./Game.styles";
+import { Wrapper, OptionsWrapper } from "./Game.styles";
 import MusicPlayer from "../MusicPlayer/MusicPlayer";
 import GuessOption from "../GuessOption/GuessOption";
+import GameResults from "../GameResults/GameResults";
 
 const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   // currentRound -> integer round number
@@ -14,6 +15,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   const [listOfSongs, setListOfSongs] = useState(songs);
   // options -> random selection of "answers" with one correct
   const [options, setOptions] = useState([]);
+  const [gameEnded, setGameEnded] = useState(false);
 
   const getRandom = () => {
     // temp -> songs not chosen for the round
@@ -31,13 +33,13 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const getRandomOptions = () => {
+    listOfSongs.forEach((s) => (s.isUsed = false)); // manual reset
     let setOfOptions = [];
     let chosen = listOfSongs.filter(({ isChosen }) => isChosen);
     let wrongChoices = listOfSongs.filter(({ isChosen }) => !isChosen);
     let counter = 0;
     let randomInsertionIndex = Math.floor(Math.random() * numArtists);
     while (counter < numArtists) {
-      console.log("test");
       if (counter === randomInsertionIndex) {
         setOfOptions.push(chosen[currentRound]);
       } else {
@@ -62,11 +64,14 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   // game loop
   useEffect(() => {
     if (choice) {
+      let timer;
       result();
       if (!isGameOver()) {
-        const timer = setTimeout(() => moveToNextRound(), 1000);
-        return () => clearTimeout(timer);
+        timer = setTimeout(() => moveToNextRound(), 1000);
+      } else {
+        timer = setTimeout(() => setGameEnded(true), 1000);
       }
+      return () => clearTimeout(timer);
     }
   }, [choice]);
 
@@ -78,7 +83,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const result = () => {
-    if (!choice.isChosen) setNumIncorrect((prev) => prev++);
+    if (!choice.isChosen) setNumIncorrect(numIncorrect + 1);
   };
 
   const isGameOver = () => {
@@ -87,7 +92,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const moveToNextRound = () => {
-    setCurrentRound((prev) => prev++);
+    setCurrentRound(currentRound + 1);
     getRandomOptions();
   };
 
@@ -110,12 +115,17 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   return (
     <Wrapper>
-      {currentRound > 0 && (
+      {!gameEnded && currentRound > 0 && (
         <MusicPlayer
-          url={listOfSongs.filter((s) => s.isChosen)[currentRound - 1]}
+          url={
+            listOfSongs.filter((s) => s.isChosen)[currentRound - 1].preview_url
+          }
         />
       )}
-      {options.length > 0 && renderOptions}
+      <OptionsWrapper>
+        {!gameEnded && options.length > 0 && renderOptions}
+      </OptionsWrapper>
+      {gameEnded && <GameResults />}
     </Wrapper>
   );
 };
