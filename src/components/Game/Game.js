@@ -28,9 +28,11 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
       counter++;
     }
     setListOfSongs(tempListSongs.filter((el) => el.isChosen));
+    console.log("getRandom()");
   };
 
   const getRandomOptions = () => {
+    console.log(listOfSongs);
     let setOfOptions = [];
     let chosen = listOfSongs.filter(({ isChosen }) => isChosen);
     let wrongChoices = listOfSongs.filter(({ isChosen }) => !isChosen);
@@ -55,8 +57,6 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   useEffect(() => {
     // initialize
     getRandom();
-    console.log(listOfSongs);
-    getRandomOptions();
     moveToNextRound();
   }, []);
 
@@ -64,18 +64,15 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   useEffect(() => {
     if (choice) {
       result();
-      if (!isGameOver) {
-        const timer = setTimeout(moveToNextRound, 1000);
+      if (!isGameOver()) {
+        const timer = setTimeout(() => moveToNextRound(), 1000);
         return () => clearTimeout(timer);
       }
     }
   }, [choice]);
 
-  // playSong function (?)
-  // getRandomArtists, async(?)
-
   const resetGame = () => {
-    setCurrentRound(null);
+    setCurrentRound(0);
     setNumIncorrect(0);
     setChoice(null);
     setChosenSongs(null);
@@ -91,9 +88,8 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const moveToNextRound = () => {
-    //setCurrentRound(currentRound++) modifies state directly
     setCurrentRound((prev) => prev++);
-    //getRandomOptions();
+    getRandomOptions();
   };
 
   // flatten options

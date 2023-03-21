@@ -11,7 +11,7 @@ const Home = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [numSongs, setNumSongs] = useState(3);
-  const [numArtists, setNumArtists] = useState(2);
+  const [numArtists, setNumArtists] = useState(4);
   const [gameStarted, setGameStarted] = useState(false);
   const [isHardMode, setIsHardMode] = useState(false); // possible throwaway answer from another genre?
   const [songs, setSongs] = useState([]);
