@@ -96,7 +96,7 @@ const Home = () => {
         setNumSongs={setNumSongs}
         setNumArtists={setNumArtists}
       />
-      {songs.length > 0 && <Game songs={songs} numSongs={numSongs} />}
+      {songs.length > 0 && <Game songs={songs} numSongs={numSongs} numArtists={numArtists} />}
     </React.Fragment>
   );
 };
