@@ -6,7 +6,7 @@ import GuessOption from "../GuessOption/GuessOption";
 
 const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   // currentRound -> integer round number
-  const [currentRound, setCurrentRound] = useState(null);
+  const [currentRound, setCurrentRound] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
   const [choice, setChoice] = useState(null);
   // listOfSongs -> random selection of "questions"
@@ -32,16 +32,13 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   useEffect(() => {
     // initialize
     getRandom();
-    console.log(listOfSongs.filter((el) => el.isChosen));
-    setCurrentRound(0);
+    //console.log(listOfSongs.filter((el) => el.isChosen));
+    moveToNextRound();
   }, []);
 
-  // call useEffect every time choice is updated (and isn't null)
+  // game loop
   useEffect(() => {
     if (choice) {
-      // after selecting a choice, call result() and moveToNextRound()
-      // recommended to use setTimeout before moveToNextRound for UX purposes
-      // clearTimeout once done
       result();
       if (!isGameOver) {
         const timer = setTimeout(moveToNextRound, 1000);
@@ -50,12 +47,8 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
     }
   }, [choice]);
 
-  // resetGame function
-  // playSong function
+  // playSong function (?)
   // getRandomArtists, async(?)
-  // result function (tally up incorrect guesses)
-  // moveToNextRound function (set and play song, update choices, setChoice to null)
-  // isGameOver function (win or lose)
 
   const resetGame = () => {
     setCurrentRound(null);
@@ -70,12 +63,12 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   const isGameOver = () => {
     // check if on last round or made a wrong guess in hard mode
-    return currentRound + 1 === numSongs || (isHardMode && numIncorrect > 0);
+    return currentRound === numSongs || (isHardMode && numIncorrect > 0);
   };
 
   const moveToNextRound = () => {
     setCurrentRound(currentRound++);
-    setChosenSongs(null);
+    //getRandomOptions();
   };
 
   const renderOptions = options.map((o, index) => (
@@ -90,12 +83,12 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   return (
     <Wrapper>
-      {currentRound && (
-          <MusicPlayer
-            url={listOfSongs.filter((s) => s.isChosen)[currentRound]}
-          />
-        ) &&
-        renderOptions}
+      {currentRound > 0 && (
+        <MusicPlayer
+          url={listOfSongs.filter((s) => s.isChosen)[currentRound - 1]}
+        />
+      )}
+      {options.length > 0 && renderOptions}
     </Wrapper>
   );
 };
