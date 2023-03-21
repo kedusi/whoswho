@@ -85,15 +85,17 @@ const Home = () => {
 
   return (
     <React.Fragment>
-      <Settings
-        genres={genres}
-        selectedGenre={selectedGenre}
-        numSongs={numSongs}
-        numArtists={setNumArtists}
-        setSelectedGenre={setSelectedGenre}
-        setNumSongs={setNumSongs}
-        setNumArtists={setNumArtists}
-      />
+      {!gameStarted && (
+        <Settings
+          genres={genres}
+          selectedGenre={selectedGenre}
+          numSongs={numSongs}
+          numArtists={setNumArtists}
+          setSelectedGenre={setSelectedGenre}
+          setNumSongs={setNumSongs}
+          setNumArtists={setNumArtists}
+        />
+      )}
       {songs.length > 0 && (
         <Game
           songs={songs}

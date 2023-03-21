@@ -27,18 +27,17 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
       temp = tempListSongs.filter((el) => !el.isChosen);
       counter++;
     }
-    setListOfSongs(tempListSongs.filter((el) => el.isChosen));
-    console.log("getRandom()");
+    setListOfSongs(tempListSongs);
   };
 
   const getRandomOptions = () => {
-    console.log(listOfSongs);
     let setOfOptions = [];
     let chosen = listOfSongs.filter(({ isChosen }) => isChosen);
     let wrongChoices = listOfSongs.filter(({ isChosen }) => !isChosen);
     let counter = 0;
     let randomInsertionIndex = Math.floor(Math.random() * numArtists);
     while (counter < numArtists) {
+      console.log("test");
       if (counter === randomInsertionIndex) {
         setOfOptions.push(chosen[currentRound]);
       } else {
