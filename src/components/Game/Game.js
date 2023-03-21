@@ -1,36 +1,61 @@
+import { round } from "lodash";
 import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../../services/api";
 import { Wrapper } from "./Game.styles";
 
-const Game = ({songs, numSongs, numArtists}) => {
+const Game = ({ songs, numSongs, numArtists }) => {
   // currentRound -> integer round number
-  const [currentRound, setCurrentRound] = useState(null);
+  const [currentRound, setCurrentRound] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
   const [choice, setChoice] = useState(null);
   // listOfSongs -> random selection of "questions"
-  const [listOfSongs, setListOfSongs] = useState(songs)
+  const [listOfSongs, setListOfSongs] = useState(songs);
   // options -> random selection of "answers" with one correct
-  const [options, setOptions] = useState([])
+  const [options, setOptions] = useState([]);
 
   const getRandom = () => {
     // temp -> songs not chosen for the round
-    let temp = songs
+    let temp = songs;
     // tempListSongs -> songs chosen for round
-    let tempListSongs = songs
-    let counter = 0
-    while(counter < numSongs) {
-      let randomIndex = Math.floor(Math.random() * temp.length)
-      tempListSongs[randomIndex].isChosen = true
-      temp = tempListSongs.filter(el => !el.isChosen)
-      counter++
+    let tempListSongs = songs;
+    let counter = 0;
+    while (counter < numSongs) {
+      let randomIndex = Math.floor(Math.random() * temp.length);
+      tempListSongs[randomIndex].isChosen = true;
+      temp = tempListSongs.filter((el) => !el.isChosen);
+      counter++;
     }
-    setListOfSongs(tempListSongs.filter(el => el.isChosen))
-  }
+    setListOfSongs(tempListSongs.filter((el) => el.isChosen));
+  };
+
+  const getRandomOptions = () => {
+    let setOfOptions = [];
+    let chosen = listOfSongs.filter(({ isChosen }) => isChosen);
+    let wrongChoices = listOfSongs.filter(({ isChosen }) => !isChosen);
+    let counter = 0;
+    let randomInsertionIndex = Math.floor(Math.random() * numArtists);
+    while (counter < numArtists) {
+      if (counter === randomInsertionIndex) {
+        setOfOptions.push(chosen[currentRound]);
+      } else {
+        let randomIndex = Math.floor(Math.random() * wrongChoices.length);
+        if (wrongChoices[randomIndex].isUsed) {
+          continue;
+        }
+        wrongChoices[randomIndex].isUsed = true;
+        setOfOptions = [...setOfOptions, wrongChoices[randomIndex]];
+      }
+      counter++;
+    }
+    setOptions(setOfOptions);
+    console.log(setOfOptions);
+  };
 
   useEffect(() => {
     // initialize
-    getRandom()
-    console.log(chosenSongs.filter(el => el.isChosen))
+    getRandom();
+    getRandomOptions();
+    // console.log(options);
     setCurrentRound(0);
   }, []);
 

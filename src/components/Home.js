@@ -10,7 +10,7 @@ const TOKEN_KEY = "whos-who-access-token";
 const Home = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
-  const [numSongs, setNumSongs] = useState(1);
+  const [numSongs, setNumSongs] = useState(3);
   const [numArtists, setNumArtists] = useState(2);
   const [gameStarted, setGameStarted] = useState(false);
   const [isHardMode, setIsHardMode] = useState(false); // possible throwaway answer from another genre?
