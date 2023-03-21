@@ -2,8 +2,10 @@ import { round } from "lodash";
 import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../../services/api";
 import { Wrapper } from "./Game.styles";
+import MusicPlayer from "../MusicPlayer/MusicPlayer";
+import GuessOption from "../GuessOption/GuessOption";
 
-const Game = ({ songs, numSongs, numArtists }) => {
+const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   // currentRound -> integer round number
   const [currentRound, setCurrentRound] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
@@ -48,34 +50,70 @@ const Game = ({ songs, numSongs, numArtists }) => {
       counter++;
     }
     setOptions(setOfOptions);
-    console.log(setOfOptions);
   };
 
   useEffect(() => {
     // initialize
     getRandom();
     getRandomOptions();
-    // console.log(options);
-    setCurrentRound(0);
+    moveToNextRound();
   }, []);
 
-  // call useEffect every time choice is updated (and isn't null)
+  // game loop
   useEffect(() => {
     if (choice) {
-      // after selecting a choice, call result() and moveToNextRound()
-      // recommended to use setTimeout before moveToNextRound for UX purposes
-      // clearTimeout once done
+      result();
+      if (!isGameOver) {
+        const timer = setTimeout(moveToNextRound, 1000);
+        return () => clearTimeout(timer);
+      }
     }
   }, [choice]);
 
-  // resetGame function
-  // playSong function
+  // playSong function (?)
   // getRandomArtists, async(?)
-  // result function (tally up incorrect guesses)
-  // moveToNextRound function (set and play song, update choices, setChoice to null)
-  // gameOver function (win or lose)
 
-  return <Wrapper></Wrapper>;
+  const resetGame = () => {
+    setCurrentRound(null);
+    setNumIncorrect(0);
+    setChoice(null);
+    setChosenSongs(null);
+  };
+
+  const result = () => {
+    if (!choice.isCorrect) setNumIncorrect(numIncorrect++);
+  };
+
+  const isGameOver = () => {
+    // check if on last round or made a wrong guess in hard mode
+    return currentRound === numSongs || (isHardMode && numIncorrect > 0);
+  };
+
+  const moveToNextRound = () => {
+    setCurrentRound(currentRound++);
+    //getRandomOptions();
+  };
+
+  const renderOptions = options.map((o, index) => (
+    <GuessOption
+      key={index}
+      name={o.name}
+      isCorrect={o.isCorrect}
+      setChoice={() => setChoice(o)}
+      roundOver={!!choice}
+    />
+  ));
+
+  return (
+    <Wrapper>
+      {currentRound > 0 && (
+        <MusicPlayer
+          url={listOfSongs.filter((s) => s.isChosen)[currentRound - 1]}
+        />
+      )}
+      {options.length > 0 && renderOptions}
+    </Wrapper>
+  );
 };
 
 export default Game;

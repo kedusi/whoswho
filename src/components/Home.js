@@ -31,17 +31,15 @@ const Home = () => {
       token,
       endpoint: `search?q=genre:${selectedGenre}&type=track&limit=10`,
     });
-    // 
-    const songs = response.tracks.items
-    const cleanedSongs = songs.map(({artists, preview_url, name}) => ({
+    //
+    const songs = response.tracks.items;
+    const cleanedSongs = songs.map(({ artists, preview_url, name }) => ({
       artists,
       preview_url,
-      name
-    }))
-    setSongs(cleanedSongs)
+      name,
+    }));
+    setSongs(cleanedSongs);
   };
-
-  // getRandomSongs: call setSongs
 
   const loadGenres = async (t) => {
     setConfigLoading(true);
@@ -96,7 +94,14 @@ const Home = () => {
         setNumSongs={setNumSongs}
         setNumArtists={setNumArtists}
       />
-      {songs.length > 0 && <Game songs={songs} numSongs={numSongs} numArtists={numArtists} />}
+      {songs.length > 0 && (
+        <Game
+          songs={songs}
+          numSongs={numSongs}
+          numArtists={numArtists}
+          isHardMode={isHardMode}
+        />
+      )}
     </React.Fragment>
   );
 };
