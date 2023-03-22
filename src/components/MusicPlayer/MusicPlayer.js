@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Wrapper } from "./MusicPlayer.styles";
+import {
+  Wrapper,
+  AudioContainer,
+  AudioTime,
+  VolumeWrapper,
+  IconWrapper,
+} from "./MusicPlayer.styles";
 import { Play, Pause, Volume2 } from "react-feather";
 
 const MusicPlayer = ({ url }) => {
@@ -56,32 +62,40 @@ const MusicPlayer = ({ url }) => {
 
   return (
     <Wrapper>
-      <audio ref={audioRef} id="player" src={url} type="audio/mpeg" />
-      {!isPlaying && <Play onClick={play} />}
-      {isPlaying && <Pause onClick={pause} />}
-      <input
-        type="range"
-        id="track-time"
-        name="track-time"
-        min="0"
-        max="30"
-        step="0.1"
-        value={currentTime}
-        onChange={seek}
-      />
-      <span>{formatTime(currentTime)}</span>
-      <span>0:30</span>
-      <Volume2 />
-      <input
-        type="range"
-        id="volume"
-        name="volume"
-        min="0"
-        max="1"
-        step="0.1"
-        value={volume}
-        onChange={changeVolume}
-      />
+      <AudioContainer>
+        <audio ref={audioRef} id="player" src={url} type="audio/mpeg" />
+        <IconWrapper>
+          {!isPlaying && <Play onClick={play} />}
+          {isPlaying && <Pause onClick={pause} />}
+        </IconWrapper>
+        <input
+          type="range"
+          id="track-time"
+          name="track-time"
+          min="0"
+          max="30"
+          step="0.1"
+          value={currentTime}
+          onChange={seek}
+        />
+        <AudioTime>
+          <span>{formatTime(currentTime)}</span>
+          <span>0:30</span>
+        </AudioTime>
+        <VolumeWrapper>
+          <Volume2 />
+          <input
+            type="range"
+            id="volume"
+            name="volume"
+            min="0"
+            max="1"
+            step="0.1"
+            value={volume}
+            onChange={changeVolume}
+          />
+        </VolumeWrapper>
+      </AudioContainer>
     </Wrapper>
   );
 };
