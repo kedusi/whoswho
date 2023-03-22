@@ -50,6 +50,13 @@ const MusicPlayer = ({ url }) => {
     setCurrentTime(audioRef.current.currentTime);
   };
 
+  const reset = () => {
+    setIsPlaying(false);
+    setCurrentTime(0);
+    audioRef.current.volume = volume;
+  };
+
+  // update track time every second
   let interval;
   useEffect(() => {
     if (isPlaying) {
@@ -59,6 +66,9 @@ const MusicPlayer = ({ url }) => {
     }
     return () => clearInterval(interval);
   }, [isPlaying]);
+
+  // reset every round
+  useEffect(() => reset(), [url]);
 
   return (
     <Wrapper>
