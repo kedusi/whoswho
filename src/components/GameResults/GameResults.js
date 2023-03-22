@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 
-const GameResults = () => {
-  return <>game is over</>;
+const GameResults = ({ resetGame }) => {
+  return (
+    <>
+      game is over
+      <button onClick={resetGame}>Restart</button>
+    </>
+  );
 };
 
 export default GameResults;

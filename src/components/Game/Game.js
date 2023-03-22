@@ -6,7 +6,14 @@ import MusicPlayer from "../MusicPlayer/MusicPlayer";
 import GuessOption from "../GuessOption/GuessOption";
 import GameResults from "../GameResults/GameResults";
 
-const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
+const Game = ({
+  songs,
+  numSongs,
+  numArtists,
+  isHardMode,
+  setShowSettings,
+  setSongs,
+}) => {
   // currentRound -> integer round number
   const [currentRound, setCurrentRound] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
@@ -58,6 +65,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   useEffect(() => {
     // initialize
+    setGameEnded(false);
     getRandom();
     moveToNextRound();
   }, []);
@@ -77,10 +85,12 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   }, [choice]);
 
   const resetGame = () => {
+    setSongs([]);
     setCurrentRound(0);
     setNumIncorrect(0);
     setChoice(null);
-    setChosenSongs(null);
+    setListOfSongs(null);
+    setShowSettings(true);
   };
 
   const result = () => {
@@ -127,7 +137,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
       <OptionsWrapper>
         {!gameEnded && options.length > 0 && renderOptions}
       </OptionsWrapper>
-      {gameEnded && <GameResults />}
+      {gameEnded && <GameResults resetGame={resetGame} />}
     </Wrapper>
   );
 };

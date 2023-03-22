@@ -12,7 +12,7 @@ const Home = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [numSongs, setNumSongs] = useState(3);
   const [numArtists, setNumArtists] = useState(4);
-  const [gameStarted, setGameStarted] = useState(false);
+  const [showSettings, setShowSettings] = useState(true);
   const [isHardMode, setIsHardMode] = useState(false); // possible throwaway answer from another genre?
   const [songs, setSongs] = useState([]);
 
@@ -85,7 +85,7 @@ const Home = () => {
 
   return (
     <React.Fragment>
-      {!gameStarted && (
+      {showSettings && (
         <Settings
           genres={genres}
           selectedGenre={selectedGenre}
@@ -102,6 +102,8 @@ const Home = () => {
           numSongs={numSongs}
           numArtists={numArtists}
           isHardMode={isHardMode}
+          setShowSettings={setShowSettings}
+          setSongs={setSongs}
         />
       )}
     </React.Fragment>
