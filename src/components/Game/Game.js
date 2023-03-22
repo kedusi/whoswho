@@ -6,7 +6,14 @@ import MusicPlayer from "../MusicPlayer/MusicPlayer";
 import GuessOption from "../GuessOption/GuessOption";
 import GameResults from "../GameResults/GameResults";
 
-const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
+const Game = ({
+  songs,
+  numSongs,
+  numArtists,
+  isHardMode,
+  setShowSettings,
+  setSongs,
+}) => {
   // currentRound -> integer round number
   const [currentRound, setCurrentRound] = useState(0);
   const [numIncorrect, setNumIncorrect] = useState(0);
@@ -25,7 +32,8 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
     let counter = 0;
     while (counter < numSongs) {
       let randomIndex = Math.floor(Math.random() * temp.length);
-      tempListSongs[randomIndex].isChosen = true;
+      // flag corresponding song on tempListSongs from temp (to avoid same index edge case)
+      tempListSongs.filter((s) => s === temp[randomIndex])[0].isChosen = true;
       temp = tempListSongs.filter((el) => !el.isChosen);
       counter++;
     }
@@ -57,6 +65,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
 
   useEffect(() => {
     // initialize
+    setGameEnded(false);
     getRandom();
     moveToNextRound();
   }, []);
@@ -76,10 +85,12 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   }, [choice]);
 
   const resetGame = () => {
+    setSongs([]);
     setCurrentRound(0);
     setNumIncorrect(0);
     setChoice(null);
-    setChosenSongs(null);
+    setListOfSongs(null);
+    setShowSettings(true);
   };
 
   const result = () => {
@@ -97,7 +108,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
     getRandomOptions();
   };
 
-  // flatten options
+  // flatten artists
   const getNames = (artists) =>
     //artists.reduce((acc, artist) => acc + ", " + artist.name, artists[0].name);
     artists.map((a) => a.name).join(", ");
@@ -126,7 +137,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
       <OptionsWrapper>
         {!gameEnded && options.length > 0 && renderOptions}
       </OptionsWrapper>
-      {gameEnded && <GameResults />}
+      {gameEnded && <GameResults resetGame={resetGame} />}
     </Wrapper>
   );
 };
