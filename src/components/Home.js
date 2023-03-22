@@ -6,6 +6,8 @@ import Game from "./Game/Game";
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
 const TOKEN_KEY = "whos-who-access-token";
+const SAVED_SETTINGS_KEY = "saved-settings";
+const SETTINGS_SAVE_DAYS = 365;
 
 const Home = () => {
   const [start, setStart] = useState(false);
@@ -24,6 +26,7 @@ const Home = () => {
   useEffect(() => {
     if (start) {
       fetchSongsFromGenre();
+      setStart(false);
     }
   }, [start]);
 
@@ -50,9 +53,22 @@ const Home = () => {
       token: t,
       endpoint: "recommendations/available-genre-seeds",
     });
-    console.log(response);
+    console.log(`Fetched genres: ${response.genres}`);
     setGenres(response.genres);
     setConfigLoading(false);
+  };
+
+  const loadSettings = () => {
+    const savedSettingsString = localStorage.getItem(SAVED_SETTINGS_KEY);
+    if (savedSettingsString) {
+      const savedSettings = JSON.parse(savedSettingsString);
+      if (savedSettings.expiration > Date.now()) {
+        console.log("Found saved settings in localStorage");
+        setNumArtists(savedSettings.numArtists);
+        setNumSongs(savedSettings.numSongs);
+        return;
+      }
+    }
   };
 
   useEffect(() => {
@@ -66,7 +82,7 @@ const Home = () => {
         setAuthLoading(false);
         setToken(storedToken.value);
         loadGenres(storedToken.value);
-        // loadSettings
+        loadSettings();
         return;
       }
     }
@@ -89,6 +105,12 @@ const Home = () => {
 
   const startGame = () => {
     setShowSettings(false);
+    const newSavedSettings = {
+      numArtists,
+      numSongs,
+      expiration: Date.now() + 1000 * 60 * 60 * 24 * SETTINGS_SAVE_DAYS,
+    };
+    localStorage.setItem(SAVED_SETTINGS_KEY, JSON.stringify(newSavedSettings));
     setStart(true);
   };
 
