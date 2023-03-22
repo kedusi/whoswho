@@ -20,11 +20,11 @@ const Home = () => {
   const [configLoading, setConfigLoading] = useState(false);
   const [token, setToken] = useState("");
 
-  useEffect(() => {
-    if (selectedGenre.length !== 0) {
-      fetchSongsFromGenre();
-    }
-  }, [selectedGenre]);
+  // useEffect(() => {
+  //   if (selectedGenre.length !== 0) {
+  //     fetchSongsFromGenre();
+  //   }
+  // }, [selectedGenre]);
 
   const fetchSongsFromGenre = async () => {
     const response = await fetchFromSpotify({
@@ -83,6 +83,11 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
+  const startGame = () => {
+    setShowSettings(false);
+    fetchSongsFromGenre();
+  };
+
   return (
     <React.Fragment>
       {showSettings && (
@@ -94,6 +99,7 @@ const Home = () => {
           setSelectedGenre={setSelectedGenre}
           setNumSongs={setNumSongs}
           setNumArtists={setNumArtists}
+          startGame={startGame}
         />
       )}
       {songs.length > 0 && (

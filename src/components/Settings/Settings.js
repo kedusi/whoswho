@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Wrapper } from "./Settings.styles";
+import { Wrapper, Button } from "./Settings.styles";
 
 const Settings = ({
   genres,
@@ -9,6 +9,7 @@ const Settings = ({
   setNumSongs,
   numArtists,
   setNumArtists,
+  startGame,
 }) => {
   const incrementArtists = () => {
     setNumArtists((prev) => (prev < 4 ? prev + 1 : prev));
@@ -29,9 +30,15 @@ const Settings = ({
         Genre:
         <select
           value={selectedGenre}
-          onChange={(event) => setSelectedGenre(event.target.value)}
+          onChange={(event) => {
+            let value = event.target.value;
+            if (value === "Random") {
+              value = genres[Math.floor(Math.random() * genres.length)];
+            }
+            setSelectedGenre(value);
+          }}
         >
-          <option value="" />
+          <option value="Random">Random</option>
           {genres.map((genre) => (
             <option key={genre} value={genre}>
               {genre}
@@ -40,17 +47,19 @@ const Settings = ({
         </select>
         <div>
           <p>Number of Rounds:</p>
-          <button onClick={decrementSongs}>-</button>
+          <Button onClick={incrementSongs}>+</Button>
           <h1>{numSongs}</h1>
-          <button onClick={incrementSongs}>+</button>
+          <Button onClick={decrementSongs}>-</Button>
         </div>
         <div>
           <p>Number of Options:</p>
-          <button onClick={decrementArtists}>-</button>
+          <Button onClick={incrementArtists}>+</Button>
           <h1>{numArtists}</h1>
-          <button onClick={incrementArtists}>+</button>
+          <Button onClick={decrementArtists}>-</Button>
         </div>
       </div>
+
+      <Button onClick={startGame}>Start</Button>
     </Wrapper>
   );
 };
