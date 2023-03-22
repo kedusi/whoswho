@@ -92,7 +92,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
   };
 
   const moveToNextRound = () => {
-    setCurrentRound(currentRound + 1);
+    setCurrentRound((prev) => prev + 1);
     setChoice(null);
     getRandomOptions();
   };
