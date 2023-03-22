@@ -11,6 +11,8 @@ const Settings = ({
   setNumArtists,
   startGame,
 }) => {
+  const [currentGenre, setCurrentGenre] = useState("Random");
+
   const incrementArtists = () => {
     setNumArtists((prev) => (prev < 4 ? prev + 1 : prev));
   };
@@ -24,18 +26,19 @@ const Settings = ({
     setNumSongs((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
+  const collectGenre = () =>
+    currentGenre === "Random"
+      ? genres[Math.floor(Math.random() * genres.length)]
+      : currentGenre;
+
   return (
     <Wrapper>
       <div>
         Genre:
         <select
-          value={selectedGenre}
+          value={currentGenre}
           onChange={(event) => {
-            let value = event.target.value;
-            if (value === "Random") {
-              value = genres[Math.floor(Math.random() * genres.length)];
-            }
-            setSelectedGenre(value);
+            setCurrentGenre(event.target.value);
           }}
         >
           <option value="Random">Random</option>
@@ -59,7 +62,14 @@ const Settings = ({
         </div>
       </div>
 
-      <Button onClick={startGame}>Start</Button>
+      <Button
+        onClick={() => {
+          setSelectedGenre(collectGenre);
+          startGame();
+        }}
+      >
+        Start
+      </Button>
     </Wrapper>
   );
 };

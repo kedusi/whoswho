@@ -8,10 +8,11 @@ const AUTH_ENDPOINT =
 const TOKEN_KEY = "whos-who-access-token";
 
 const Home = () => {
+  const [start, setStart] = useState(false);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
-  const [numSongs, setNumSongs] = useState(3);
-  const [numArtists, setNumArtists] = useState(4);
+  const [numSongs, setNumSongs] = useState(1);
+  const [numArtists, setNumArtists] = useState(2);
   const [showSettings, setShowSettings] = useState(true);
   const [isHardMode, setIsHardMode] = useState(false); // possible throwaway answer from another genre?
   const [songs, setSongs] = useState([]);
@@ -20,18 +21,20 @@ const Home = () => {
   const [configLoading, setConfigLoading] = useState(false);
   const [token, setToken] = useState("");
 
-  // useEffect(() => {
-  //   if (selectedGenre.length !== 0) {
-  //     fetchSongsFromGenre();
-  //   }
-  // }, [selectedGenre]);
+  useEffect(() => {
+    if (start) {
+      fetchSongsFromGenre();
+    }
+  }, [start]);
 
   const fetchSongsFromGenre = async () => {
+    const uri = `search?q=genre:${selectedGenre}&type=track&limit=10`;
     const response = await fetchFromSpotify({
       token,
-      endpoint: `search?q=genre:${selectedGenre}&type=track&limit=10`,
+      endpoint: uri,
     });
     //
+    console.log(`Fetch uri: ${uri}`);
     const songs = response.tracks.items;
     const cleanedSongs = songs.map(({ artists, preview_url, name }) => ({
       artists,
@@ -63,6 +66,7 @@ const Home = () => {
         setAuthLoading(false);
         setToken(storedToken.value);
         loadGenres(storedToken.value);
+        // loadSettings
         return;
       }
     }
@@ -85,7 +89,7 @@ const Home = () => {
 
   const startGame = () => {
     setShowSettings(false);
-    fetchSongsFromGenre();
+    setStart(true);
   };
 
   return (

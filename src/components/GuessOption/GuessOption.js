@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Wrapper } from "./GuessOption.styles";
 
 const GuessOption = ({ name, isCorrect, setChoice, roundOver }) => {
+  const style = {};
   const borderColor =
     isCorrect && roundOver ? "green" : roundOver ? "red" : "black";
   return (
