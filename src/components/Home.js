@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../services/api";
 import Settings from "./Settings/Settings.js";
 import Game from "./Game/Game";
+import { Wrapper } from "./Home.styles";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
@@ -115,7 +116,7 @@ const Home = () => {
   };
 
   return (
-    <React.Fragment>
+    <Wrapper>
       {showSettings && (
         <Settings
           genres={genres}
@@ -138,7 +139,7 @@ const Home = () => {
           setSongs={setSongs}
         />
       )}
-    </React.Fragment>
+    </Wrapper>
   );
 };
 
