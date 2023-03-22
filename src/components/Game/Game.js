@@ -25,7 +25,8 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
     let counter = 0;
     while (counter < numSongs) {
       let randomIndex = Math.floor(Math.random() * temp.length);
-      tempListSongs[randomIndex].isChosen = true;
+      // flag corresponding song on tempListSongs from temp (to avoid same index edge case)
+      tempListSongs.filter((s) => s === temp[randomIndex])[0].isChosen = true;
       temp = tempListSongs.filter((el) => !el.isChosen);
       counter++;
     }
@@ -97,7 +98,7 @@ const Game = ({ songs, numSongs, numArtists, isHardMode }) => {
     getRandomOptions();
   };
 
-  // flatten options
+  // flatten artists
   const getNames = (artists) =>
     //artists.reduce((acc, artist) => acc + ", " + artist.name, artists[0].name);
     artists.map((a) => a.name).join(", ");
