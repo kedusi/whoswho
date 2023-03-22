@@ -90,7 +90,7 @@ const Home = () => {
           genres={genres}
           selectedGenre={selectedGenre}
           numSongs={numSongs}
-          numArtists={setNumArtists}
+          numArtists={numArtists}
           setSelectedGenre={setSelectedGenre}
           setNumSongs={setNumSongs}
           setNumArtists={setNumArtists}
