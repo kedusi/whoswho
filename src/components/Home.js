@@ -72,14 +72,14 @@ const Home = () => {
   };
 
   const loadGenres = async (t) => {
-    setConfigLoading(true);
-    const response = await fetchFromSpotify({
-      token: t,
-      endpoint: "recommendations/available-genre-seeds",
-    });
-    console.log(`Fetched genres: ${response.genres}`);
-    setGenres(response.genres);
-    // setGenres(KENNON_GENRES.concat(REN_GENRES).sort());
+    // setConfigLoading(true);
+    // const response = await fetchFromSpotify({
+    //   token: t,
+    //   endpoint: "recommendations/available-genre-seeds",
+    // });
+    // console.log(`Fetched genres: ${response.genres}`);
+    // setGenres(response.genres);
+    setGenres(KENNON_GENRES.concat(REN_GENRES).sort());
     setConfigLoading(false);
   };
 
