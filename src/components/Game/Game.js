@@ -76,9 +76,9 @@ const Game = ({
       let timer;
       result();
       if (!isGameOver()) {
-        timer = setTimeout(() => moveToNextRound(), 1000);
+        timer = setTimeout(() => moveToNextRound(), 2000);
       } else {
-        timer = setTimeout(() => setGameStarted(false), 1000);
+        timer = setTimeout(() => setGameStarted(false), 2000);
       }
       return () => clearTimeout(timer);
     }
