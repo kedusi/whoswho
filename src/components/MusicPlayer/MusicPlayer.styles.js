@@ -16,11 +16,16 @@ export const IconWrapper = styled.div`
 export const Icon = styled.div`
   background-color: white;
   border-radius: 50%;
+  cursor: pointer;
   width: 160px;
   height: 160px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.25s ease;
+  &:hover {
+    background-color: #d9d9d9;
+  }
   svg {
     width: 100px;
     height: 100px;
@@ -35,6 +40,7 @@ export const AudioContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 500px;
+  width: 100%;
 
   #track-time {
     width: 100%;
@@ -42,13 +48,12 @@ export const AudioContainer = styled.div`
 
   input[type="range"] {
     background: #5e5e5e;
-    height: 4px;
+    border-radius: 0.5em;
+    height: 5px;
+    cursor: pointer;
+
     -webkit-appearance: none;
     -moz-appearance: none;
-    cursor: pointer;
-  }
-
-  input[type="range"] {
     --range: calc(var(--max) - var(--min));
     --ratio: calc((var(--value) - var(--min)) / var(--range));
     --sx: calc(0.5 * 10px + var(--ratio) * (100% - 10px));
@@ -73,43 +78,29 @@ export const AudioContainer = styled.div`
 
   input[type="range"]::-webkit-slider-runnable-track,
   input[type="range"]::-moz-range-track {
-    height: 3px;
-    border-radius: 0.5em;
-    background: #5e5e5e;
+    height: 5px;
     border: none;
+    border-radius: 0.5em;
     box-shadow: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:hover,
-  input[type="range"]::-moz-range-thumb:hover {
-    background: white;
-  }
-
-  input[type="range"]:hover::-webkit-slider-runnable-track,
-  input[type="range"]:hover::-moz-range-track {
-    background: #5e5e5e;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:active,
-  input[type="range"]::-moz-range-thumb:active {
-    background: #f5f5f5;
-  }
-
-  input[type="range"]:active::-webkit-slider-runnable-track,
-  input[type="range"]:active::-moz-range-track {
-    background: #5e5e5e;
-  }
-
-  input[type="range"]::-webkit-slider-runnable-track,
-  input[type="range"]::-moz-range-track {
     background: linear-gradient(white, white) 0 / var(--sx) 100% no-repeat,
       #5e5e5e;
   }
 
+  input[type="range"]::-webkit-slider-thumb:hover,
+  input[type="range"]::-moz-range-thumb:hover {
+    background: #d9d9d9;
+  }
+
   input[type="range"]:hover::-webkit-slider-runnable-track,
   input[type="range"]:hover::-moz-range-track {
+    //background: #5e5e5e;
     background: linear-gradient(#1ed760, #1ed760) 0 / var(--sx) 100% no-repeat,
       #5e5e5e;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:active,
+  input[type="range"]::-moz-range-thumb:active {
+    background: white;
   }
 
   input[type="range"]:active::-webkit-slider-runnable-track,
