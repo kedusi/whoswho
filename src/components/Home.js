@@ -39,8 +39,7 @@ const Home = () => {
     });
     console.log(`Fetch uri: ${uri}`);
     const songs = response.tracks.items;
-    console.log(songs);
-    const cleanedSongs = songs.map(({ artists, preview_url, name, album }) => ({
+    let cleanedSongs = songs.map(({ artists, preview_url, name, album }) => ({
       artists,
       preview_url,
       name,
