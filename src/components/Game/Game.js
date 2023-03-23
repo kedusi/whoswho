@@ -13,6 +13,7 @@ const Game = ({
   isHardMode,
   setShowSettings,
   setSongs,
+  genre,
 }) => {
   // currentRound -> integer round number
   const [currentRound, setCurrentRound] = useState(0);
@@ -22,7 +23,7 @@ const Game = ({
   const [listOfSongs, setListOfSongs] = useState(songs);
   // options -> random selection of "answers" with one correct
   const [options, setOptions] = useState([]);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const getRandom = () => {
     // temp -> songs not chosen for the round
@@ -65,9 +66,9 @@ const Game = ({
 
   useEffect(() => {
     // initialize
-    setGameEnded(false);
     getRandom();
     moveToNextRound();
+    setGameStarted(true);
   }, []);
 
   // game loop
@@ -76,9 +77,9 @@ const Game = ({
       let timer;
       result();
       if (!isGameOver()) {
-        timer = setTimeout(() => moveToNextRound(), 1000);
+        timer = setTimeout(() => moveToNextRound(), 2000);
       } else {
-        timer = setTimeout(() => setGameEnded(true), 1000);
+        timer = setTimeout(() => setGameStarted(false), 2000);
       }
       return () => clearTimeout(timer);
     }
@@ -119,25 +120,39 @@ const Game = ({
       // options are songs with original isChosen flags
       // artists can be an array of multiple, so getNames will flatten to a comma delimited string
       name={getNames(o.artists)}
+      album={o.album}
       isCorrect={o.isChosen}
       setChoice={() => setChoice(o)}
       roundOver={!!choice}
+      round={currentRound}
     />
   ));
 
   return (
     <Wrapper>
-      {!gameEnded && currentRound > 0 && (
-        <MusicPlayer
-          url={
-            listOfSongs.filter((s) => s.isChosen)[currentRound - 1].preview_url
-          }
+      {currentRound === 0 && <>Loading...</>}
+      {gameStarted && (
+        <>
+          <h1>Round {currentRound}</h1>
+          {currentRound > 0 && (
+            <MusicPlayer
+              url={
+                listOfSongs.filter((s) => s.isChosen)[currentRound - 1]
+                  .preview_url
+              }
+            />
+          )}
+          <OptionsWrapper>{options.length > 0 && renderOptions}</OptionsWrapper>
+        </>
+      )}
+      {!gameStarted && currentRound > 0 && (
+        <GameResults
+          resetGame={resetGame}
+          genre={genre}
+          score={numSongs - numIncorrect}
+          maxScore={numSongs}
         />
       )}
-      <OptionsWrapper>
-        {!gameEnded && options.length > 0 && renderOptions}
-      </OptionsWrapper>
-      {gameEnded && <GameResults resetGame={resetGame} />}
     </Wrapper>
   );
 };

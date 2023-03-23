@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import fetchFromSpotify, { request } from "../services/api";
 import Settings from "./Settings/Settings.js";
 import Game from "./Game/Game";
+import { Wrapper } from "./Home.styles";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
@@ -33,20 +34,41 @@ const Home = () => {
   }, [start]);
 
   const fetchSongsFromGenre = async () => {
-    const uri = `search?q=genre:${selectedGenre}&type=track&limit=10`;
+    const uri = `search?q=genre:${selectedGenre}&type=track&limit=30`;
     const response = await fetchFromSpotify({
       token,
       endpoint: uri,
     });
-    //
     console.log(`Fetch uri: ${uri}`);
     const songs = response.tracks.items;
-    const cleanedSongs = songs.map(({ artists, preview_url, name }) => ({
+    let cleanedSongs = songs.map(({ artists, preview_url, name, album }) => ({
       artists,
       preview_url,
       name,
+      album: { name: album.name, url: album.images[1].url },
     }));
-    setSongs(cleanedSongs);
+    console.log("Cleaned songs (1): ");
+    console.log(cleanedSongs);
+    let foundArtists = [];
+    cleanedSongs = cleanedSongs.filter(({ artists }) => {
+      let flagUsed = false;
+      for (let artist of artists) {
+        if (foundArtists.includes(artist.name)) {
+          flagUsed = true;
+          continue;
+        }
+      }
+      if (!flagUsed) {
+        for (let artist of artists) {
+          foundArtists.push(artist.name);
+        }
+        return true;
+      } else {
+        flagUsed = false;
+        return false;
+      }
+    });
+    setSongs(cleanedSongs, console.log(cleanedSongs));
   };
 
   const loadGenres = async (t) => {
@@ -110,6 +132,7 @@ const Home = () => {
     const newSavedSettings = {
       numArtists,
       numSongs,
+      selectedGenre,
       expiration: Date.now() + 1000 * 60 * 60 * 24 * SETTINGS_SAVE_DAYS,
     };
     localStorage.setItem(SAVED_SETTINGS_KEY, JSON.stringify(newSavedSettings));
@@ -117,7 +140,7 @@ const Home = () => {
   };
 
   return (
-    <React.Fragment>
+    <Wrapper>
       {showSettings && (
         <Settings
           genres={genres}
@@ -138,9 +161,10 @@ const Home = () => {
           isHardMode={isHardMode}
           setShowSettings={setShowSettings}
           setSongs={setSongs}
+          genre={selectedGenre}
         />
       )}
-    </React.Fragment>
+    </Wrapper>
   );
 };
 
