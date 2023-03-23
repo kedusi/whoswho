@@ -22,7 +22,7 @@ const Game = ({
   const [listOfSongs, setListOfSongs] = useState(songs);
   // options -> random selection of "answers" with one correct
   const [options, setOptions] = useState([]);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const getRandom = () => {
     // temp -> songs not chosen for the round
@@ -63,11 +63,11 @@ const Game = ({
     setOptions(setOfOptions);
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     // initialize
-    setGameEnded(false);
     getRandom();
     moveToNextRound();
+    setGameStarted(true);
   }, []);
 
   // game loop
@@ -78,7 +78,7 @@ const Game = ({
       if (!isGameOver()) {
         timer = setTimeout(() => moveToNextRound(), 1000);
       } else {
-        timer = setTimeout(() => setGameEnded(true), 1000);
+        timer = setTimeout(() => setGameStarted(false), 1000);
       }
       return () => clearTimeout(timer);
     }
@@ -127,17 +127,24 @@ const Game = ({
 
   return (
     <Wrapper>
-      {!gameEnded && currentRound > 0 && (
-        <MusicPlayer
-          url={
-            listOfSongs.filter((s) => s.isChosen)[currentRound - 1].preview_url
-          }
-        />
+      {currentRound === 0 && <>Loading...</>}
+      {gameStarted && (
+        <>
+          <h1>Round {currentRound}</h1>
+          {currentRound > 0 && (
+            <MusicPlayer
+              url={
+                listOfSongs.filter((s) => s.isChosen)[currentRound - 1]
+                  .preview_url
+              }
+            />
+          )}
+          <OptionsWrapper>{options.length > 0 && renderOptions}</OptionsWrapper>
+        </>
       )}
-      <OptionsWrapper>
-        {!gameEnded && options.length > 0 && renderOptions}
-      </OptionsWrapper>
-      {gameEnded && <GameResults resetGame={resetGame} />}
+      {!gameStarted && currentRound > 0 && (
+        <GameResults resetGame={resetGame} />
+      )}
     </Wrapper>
   );
 };
