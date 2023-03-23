@@ -5,13 +5,18 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 50px;
+  h1 {
+    color: white;
+    margin-bottom: 0;
+  }
 `;
-
-export const Round = styled.h1``;
 
 export const OptionsWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
-  width: max-content;
+  width: 100%;
 `;

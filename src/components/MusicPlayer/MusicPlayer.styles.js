@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const IconWrapper = styled.div`
@@ -9,8 +12,7 @@ export const IconWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 `;
 
 export const Icon = styled.div`
@@ -41,6 +43,7 @@ export const AudioContainer = styled.div`
   align-items: center;
   max-width: 500px;
   width: 100%;
+  padding: 0 1rem;
 
   #track-time {
     width: 100%;

@@ -37,13 +37,14 @@ const Home = () => {
       token,
       endpoint: uri,
     });
-    //
     console.log(`Fetch uri: ${uri}`);
     const songs = response.tracks.items;
-    const cleanedSongs = songs.map(({ artists, preview_url, name }) => ({
+    console.log(songs);
+    const cleanedSongs = songs.map(({ artists, preview_url, name, album }) => ({
       artists,
       preview_url,
       name,
+      album: { name: album.name, url: album.images[1].url },
     }));
     setSongs(cleanedSongs);
   };

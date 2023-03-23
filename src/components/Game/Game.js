@@ -63,7 +63,7 @@ const Game = ({
     setOptions(setOfOptions);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     // initialize
     getRandom();
     moveToNextRound();
@@ -119,9 +119,11 @@ const Game = ({
       // options are songs with original isChosen flags
       // artists can be an array of multiple, so getNames will flatten to a comma delimited string
       name={getNames(o.artists)}
+      album={o.album}
       isCorrect={o.isChosen}
       setChoice={() => setChoice(o)}
       roundOver={!!choice}
+      round={currentRound}
     />
   ));
 
