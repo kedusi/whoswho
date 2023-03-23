@@ -10,7 +10,7 @@ const TOKEN_KEY = "whos-who-access-token";
 const SAVED_SETTINGS_KEY = "saved-settings";
 const SETTINGS_SAVE_DAYS = 365;
 const REN_GENRES = [];
-const KENNON_GENRES = ["classical", "jazz"];
+const KENNON_GENRES = ["classical", "jazz", "guitar", "show-tunes", "kids"];
 
 const Home = () => {
   const [start, setStart] = useState(false);
@@ -73,12 +73,13 @@ const Home = () => {
 
   const loadGenres = async (t) => {
     setConfigLoading(true);
-    // const response = await fetchFromSpotify({
-    //   token: t,
-    //   endpoint: "recommendations/available-genre-seeds",
-    // });
-    // console.log(`Fetched genres: ${response.genres}`);
-    setGenres(KENNON_GENRES.concat(REN_GENRES).sort());
+    const response = await fetchFromSpotify({
+      token: t,
+      endpoint: "recommendations/available-genre-seeds",
+    });
+    console.log(`Fetched genres: ${response.genres}`);
+    setGenres(response.genres);
+    // setGenres(KENNON_GENRES.concat(REN_GENRES).sort());
     setConfigLoading(false);
   };
 
