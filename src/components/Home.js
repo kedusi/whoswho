@@ -160,6 +160,7 @@ const Home = () => {
           isHardMode={isHardMode}
           setShowSettings={setShowSettings}
           setSongs={setSongs}
+          genre={selectedGenre}
         />
       )}
     </Wrapper>

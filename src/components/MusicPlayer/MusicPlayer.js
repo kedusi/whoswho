@@ -68,6 +68,7 @@ const MusicPlayer = ({ url }) => {
   const reset = () => {
     setIsPlaying(false);
     setCurrentTime(0);
+    updateInputStyle(trackRef.current);
     audioRef.current.volume = volume;
     updateInputStyle(volumeRef.current);
   };

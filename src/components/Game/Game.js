@@ -13,6 +13,7 @@ const Game = ({
   isHardMode,
   setShowSettings,
   setSongs,
+  genre,
 }) => {
   // currentRound -> integer round number
   const [currentRound, setCurrentRound] = useState(0);
@@ -145,7 +146,12 @@ const Game = ({
         </>
       )}
       {!gameStarted && currentRound > 0 && (
-        <GameResults resetGame={resetGame} />
+        <GameResults
+          resetGame={resetGame}
+          genre={genre}
+          score={numSongs - numIncorrect}
+          maxScore={numSongs}
+        />
       )}
     </Wrapper>
   );

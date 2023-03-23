@@ -17,6 +17,6 @@ export const OptionsWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 1rem;
   width: 100%;
 `;

@@ -21,7 +21,6 @@ export const Wrapper = styled.div`
     color: white;
     font-size: 1.1rem;
     margin-top: 2rem;
-    margin-bottom: 0.5rem;
   }
 
   &:hover {
