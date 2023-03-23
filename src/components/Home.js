@@ -32,7 +32,7 @@ const Home = () => {
   }, [start]);
 
   const fetchSongsFromGenre = async () => {
-    const uri = `search?q=genre:${selectedGenre}&type=track&limit=10`;
+    const uri = `search?q=genre:${selectedGenre}&type=track&limit=30`;
     const response = await fetchFromSpotify({
       token,
       endpoint: uri,
@@ -46,7 +46,28 @@ const Home = () => {
       name,
       album: { name: album.name, url: album.images[1].url },
     }));
-    setSongs(cleanedSongs);
+    console.log("Cleaned songs (1): ");
+    console.log(cleanedSongs);
+    let foundArtists = [];
+    cleanedSongs = cleanedSongs.filter(({ artists }) => {
+      let flagUsed = false;
+      for (let artist of artists) {
+        if (foundArtists.includes(artist.name)) {
+          flagUsed = true;
+          continue;
+        }
+      }
+      if (!flagUsed) {
+        for (let artist of artists) {
+          foundArtists.push(artist.name);
+        }
+        return true;
+      } else {
+        flagUsed = false;
+        return false;
+      }
+    });
+    setSongs(cleanedSongs, console.log(cleanedSongs));
   };
 
   const loadGenres = async (t) => {
@@ -55,7 +76,8 @@ const Home = () => {
       token: t,
       endpoint: "recommendations/available-genre-seeds",
     });
-    console.log(`Fetched genres: ${response.genres}`);
+    console.log("Fetched genres:");
+    console.log(response);
     setGenres(response.genres);
     setConfigLoading(false);
   };
@@ -110,6 +132,7 @@ const Home = () => {
     const newSavedSettings = {
       numArtists,
       numSongs,
+      selectedGenre,
       expiration: Date.now() + 1000 * 60 * 60 * 24 * SETTINGS_SAVE_DAYS,
     };
     localStorage.setItem(SAVED_SETTINGS_KEY, JSON.stringify(newSavedSettings));
